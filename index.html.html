@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gamified Quiz</title>
+<style>
+body {
+  margin: 0;
+  font-family: "Poppins", Arial, sans-serif;
+  background: linear-gradient(#eaf6ff, #cdeffd);
+}
+
+.game {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Question bar */
+.question {
+  background: #ff914d;
+  color: white;
+  padding: 15px 25px;
+  font-size: 22px;
+  border-radius: 15px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+/* Scene */
+.scene {
+  position: relative;
+  height: 420px;
+  background: linear-gradient(#f2f9ff, #e0f2ff);
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+/* Girl Image */
+.quiz-image {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;        
+  height: auto;
+}
+
+/* Options */
+.option {
+  position: absolute;
+  bottom: 40px;
+  width: 200px;
+  padding: 15px;
+  background: white;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  transition: 0.2s;
+}
+
+.option:hover {
+  transform: scale(1.05);
+}
+
+.left {
+  left: 40px;
+}
+
+.right {
+  right: 40px;
+}
+
+/* Result */
+#result {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Button */
+#nextBtn {
+  display: none;
+  margin-top: 15px;
+  padding: 10px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  background: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+<div class="game">
+  <div class="question" id="question">Question here</div>
+
+  <div class="scene">
+    <img src="images/girl.jpg">
+    <div class="option left" id="leftOption"></div>
+    <div class="option right" id="rightOption"></div>
+  </div>
+
+  <div id="result"></div>
+  <button id="nextBtn" onclick="nextQuestion()">Next Question</button>
+</div>
+
+<script>
+// Questions Array
+const quiz = [
+  {q:"Which path should Tiya take while walking?", correct:"Sidewalk", wrong:"Repair road path"},
+  {q:"What should Tiya wear when cycling?", correct:"Helmet", wrong:"Sandals"},
+  {q:"Where should Tiya cross the street?", correct:"Zebra crossing", wrong:"Anywhere"},
+  {q:"Which fruit is healthy to eat daily?", correct:"Apple", wrong:"Candy"},
+  {q:"How should Tiya behave in class?", correct:"Listen carefully", wrong:"Shout loudly"},
+  {q:"Where should Tiya keep her school bag?", correct:"On the hook", wrong:"On the floor"},
+  {q:"Which is safe to play with?", correct:"Ball", wrong:"Sharp knife"},
+  {q:"Where should Tiya dispose of trash?", correct:"Dustbin", wrong:"Ground"},
+  {q:"What should Tiya drink to stay healthy?", correct:"Water", wrong:"Soda"},
+  {q:"Which is good for eyesight?", correct:"Carrot", wrong:"Chips"},
+  {q:"Where should Tiya wait for the bus?", correct:"Bus stop", wrong:"Middle of the road"},
+  {q:"Which should Tiya wear on rainy days?", correct:"Raincoat", wrong:"Shorts"},
+  {q:"What should Tiya do when crossing the road?", correct:"Look both ways", wrong:"Run blindly"},
+  {q:"Where should Tiya keep her bicycle?", correct:"Bicycle stand", wrong:"Sidewalk"},
+  {q:"Which is safe to eat?", correct:"Cooked food", wrong:"Spoiled food"}
+];
+
+let current = 0;
+
+// Initialize first question
+function loadQuestion() {
+  document.getElementById("question").innerText = quiz[current].q;
+  // Randomize options left/right
+  if(Math.random() > 0.5){
+    document.getElementById("leftOption").innerText = quiz[current].wrong;
+    document.getElementById("leftOption").onclick = () => check(false);
+    document.getElementById("rightOption").innerText = quiz[current].correct;
+    document.getElementById("rightOption").onclick = () => check(true);
+  } else {
+    document.getElementById("rightOption").innerText = quiz[current].wrong;
+    document.getElementById("rightOption").onclick = () => check(false);
+    document.getElementById("leftOption").innerText = quiz[current].correct;
+    document.getElementById("leftOption").onclick = () => check(true);
+  }
+  document.getElementById("result").innerText = "";
+  document.getElementById("nextBtn").style.display = "none";
+}
+
+// Check answer
+function check(correct) {
+  const result = document.getElementById("result");
+  const btn = document.getElementById("nextBtn");
+  if(correct){
+    result.innerHTML = "✅ Correct!";
+    result.style.color = "green";
+  } else {
+    result.innerHTML = "❌ Wrong!";
+    result.style.color = "red";
+  }
+  btn.style.display = "inline-block";
+}
+
+// Next question
+function nextQuestion() {
+  current++;
+  if(current < quiz.length){
+    loadQuestion();
+  } else {
+    document.getElementById("question").innerText = "🎉 Quiz Completed!";
+    document.getElementById("leftOption").style.display = "none";
+    document.getElementById("rightOption").style.display = "none";
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("result").innerText = "";
+  }
+}
+
+// Start quiz
+loadQuestion();
+</script>
+</body>
+</html>
